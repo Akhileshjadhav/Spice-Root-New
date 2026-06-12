@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "installCommand": "npm --prefix client install",
-  "buildCommand": "node -e \"const {spawnSync}=require('node:child_process'); const r=spawnSync(process.execPath,['node_modules/vite/bin/vite.js','build','--configLoader','native'],{cwd:'client',stdio:'inherit'}); process.exit(r.status ?? 1)\"",
-  "outputDirectory": "client/dist",
+  "installCommand": "npm install",
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
   "rewrites": [
     {
       "source": "/(.*)",
