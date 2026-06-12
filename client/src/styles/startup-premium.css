@@ -1,0 +1,1937 @@
+.ember-home-shell {
+  position: relative;
+  min-height: 100vh;
+  overflow-x: clip;
+  overflow-y: visible;
+  scroll-behavior: smooth;
+  background:
+    radial-gradient(circle at top, rgba(255, 132, 24, 0.12), transparent 24%),
+    radial-gradient(circle at 50% 25%, rgba(255, 120, 20, 0.08), transparent 26%),
+    linear-gradient(180deg, #0d0503 0%, #160705 28%, #120604 56%, #090303 100%);
+}
+
+.ember-home-shell header,
+.ember-home-shell main,
+.ember-home-shell footer {
+  position: relative;
+  z-index: 3;
+}
+
+.ember-noise {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 20% 14%, rgba(255, 174, 77, 0.14), transparent 2px),
+    radial-gradient(circle at 60% 28%, rgba(255, 132, 24, 0.12), transparent 2px),
+    radial-gradient(circle at 80% 80%, rgba(255, 115, 0, 0.1), transparent 2px),
+    radial-gradient(circle at 36% 72%, rgba(255, 190, 120, 0.1), transparent 2px);
+  background-size: 240px 240px, 320px 320px, 300px 300px, 280px 280px;
+  opacity: 0.75;
+  mix-blend-mode: screen;
+}
+
+.ember-page,
+.ember-footer {
+  width: min(1180px, calc(100% - 32px));
+  margin: 0 auto;
+}
+
+.ember-page {
+  padding-top: 10px;
+}
+
+.ember-navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  transform: none;
+  z-index: 10;
+  width: 100%;
+  padding: 18px 0 0;
+  transition:
+    background 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.ember-navbar.scrolled {
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.16);
+}
+
+.ember-navbar-inner {
+  width: min(1240px, calc(100% - 32px));
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 16px 6px;
+  border: 1px solid rgba(255, 193, 139, 0.18);
+  border-radius: 26px;
+  background: rgba(19, 7, 5, 0.72);
+  box-shadow:
+    0 18px 44px rgba(0, 0, 0, 0.28),
+    inset 0 0 0 1px rgba(255, 229, 210, 0.04);
+  backdrop-filter: blur(16px);
+  transition:
+    box-shadow 0.3s ease,
+    background 0.3s ease;
+  overflow: visible;
+}
+
+.ember-navbar-inner > * {
+  position: relative;
+  z-index: 1;
+}
+
+.ember-navbar-media {
+  position: absolute;
+  inset: 0;
+  display: block;
+  border-radius: inherit;
+  overflow: hidden;
+  background:
+    linear-gradient(90deg, rgba(18, 7, 5, 0.86) 0%, rgba(18, 7, 5, 0.72) 28%, rgba(18, 7, 5, 0.56) 56%, rgba(18, 7, 5, 0.72) 100%),
+    url("../assets/navbar-spice-background.jpg");
+  background-position: center, center;
+  background-size: cover, cover;
+  opacity: 0.78;
+  pointer-events: none;
+}
+
+.ember-navbar-media::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(255, 164, 78, 0.1), transparent 38%),
+    linear-gradient(90deg, rgba(255, 188, 133, 0.06), transparent 24%, transparent 76%, rgba(255, 188, 133, 0.06));
+}
+
+.ember-navbar.scrolled .ember-navbar-inner {
+  background: rgba(19, 7, 5, 0.82);
+  box-shadow:
+    0 22px 54px rgba(0, 0, 0, 0.32),
+    inset 0 0 0 1px rgba(255, 229, 210, 0.05);
+}
+
+.ember-navbar a:focus-visible,
+.ember-navbar button:focus-visible,
+.ember-icon-button:focus-visible,
+.ember-mobile-icon-button:focus-visible,
+.ember-button:focus-visible,
+.ember-inline-form input:focus-visible,
+.ember-spotlight-tabs button:focus-visible {
+  outline: 2px solid rgba(255, 182, 117, 0.88);
+  outline-offset: 3px;
+}
+
+.ember-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #fff2e1;
+}
+
+.ember-brand strong,
+.ember-brand small {
+  display: block;
+}
+
+.ember-brand strong {
+  font-size: 1.65rem;
+  font-family: "Cormorant Garamond", serif;
+  font-weight: 700;
+}
+
+.ember-brand small {
+  color: rgba(255, 214, 182, 0.76);
+  font-size: 0.76rem;
+}
+
+.ember-nav {
+  display: inline-flex;
+  align-items: center;
+  gap: 24px;
+  flex: 1;
+  justify-content: center;
+}
+
+.ember-nav button,
+.ember-nav a,
+.ember-mobile-nav button,
+.ember-mobile-nav a {
+  border: 0;
+  background: transparent;
+  color: rgba(255, 229, 210, 0.84);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.ember-nav button,
+.ember-nav a {
+  position: relative;
+  padding: 8px 2px;
+  font-size: 1rem;
+}
+
+.ember-nav button::after,
+.ember-nav a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -2px;
+  height: 2px;
+  background: linear-gradient(90deg, #ffbf7d, #f27b23);
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 0.25s ease;
+}
+
+.ember-nav button:hover::after,
+.ember-nav button.active::after,
+.ember-nav a.active::after,
+.ember-nav a:hover::after {
+  transform: scaleX(1);
+}
+
+.ember-nav button:hover,
+.ember-nav button.active,
+.ember-nav a.active,
+.ember-nav a:hover {
+  color: #fff6ec;
+}
+
+.ember-nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ember-user-greeting {
+  color: #ffd6ae;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.ember-icon-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 192, 142, 0.18);
+  background: rgba(255, 248, 240, 0.06);
+  color: #ffd7b1;
+  cursor: pointer;
+  transition:
+    transform 0.25s ease,
+    border-color 0.25s ease,
+    background 0.25s ease;
+}
+
+.ember-icon-button:hover,
+.ember-mobile-icon-button:hover {
+  transform: translateY(-1px);
+  border-color: rgba(255, 188, 133, 0.36);
+  background: rgba(255, 146, 58, 0.12);
+}
+
+.ember-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  padding: 0 18px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 192, 142, 0.18);
+  font-weight: 700;
+  color: #ffffff;
+  box-shadow: none;
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    border-color 0.25s ease,
+    background 0.25s ease;
+}
+
+.ember-button:hover,
+.ember-button:focus-visible {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 22px rgba(255, 122, 30, 0.18);
+}
+
+.ember-button-primary {
+  background: linear-gradient(180deg, #f27b23 0%, #d7581f 100%);
+  border-color: rgba(255, 176, 106, 0.32);
+}
+
+.ember-button-ghost,
+.ember-button-secondary {
+  background: rgba(255, 248, 240, 0.08);
+  color: #fff2e1;
+}
+
+.ember-small-button {
+  min-height: 38px;
+  padding: 0 14px;
+  font-size: 0.88rem;
+}
+
+.ember-menu-toggle {
+  display: none;
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 192, 142, 0.18);
+  background: rgba(255, 248, 240, 0.06);
+}
+
+.ember-menu-toggle span {
+  display: block;
+  width: 18px;
+  height: 2px;
+  margin: 6px auto;
+  background: #ffd6ae;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ember-menu-toggle.open span:first-child {
+  transform: translateY(4px) rotate(45deg);
+}
+
+.ember-menu-toggle.open span:last-child {
+  transform: translateY(-4px) rotate(-45deg);
+}
+
+.ember-mobile-nav {
+  display: none;
+}
+
+.ember-mobile-user-line {
+  padding: 12px 0 6px;
+  color: #ffd6ae;
+  font-weight: 700;
+}
+
+.ember-mobile-icon-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 10px 0;
+  color: rgba(255, 229, 210, 0.84);
+}
+
+.ember-navbar-spacer {
+  height: 106px;
+}
+
+#home,
+#features,
+#about,
+#testimonials,
+#contact {
+  scroll-margin-top: 110px;
+}
+
+.ember-hero {
+  padding: 4px 0 40px;
+}
+
+.ember-hero-frame,
+.ember-card-glass,
+.ember-surface {
+  position: relative;
+  overflow: hidden;
+  border-radius: 28px;
+  border: 1px solid rgba(255, 190, 140, 0.22);
+  background: linear-gradient(180deg, rgba(35, 14, 9, 0.88), rgba(20, 8, 6, 0.88));
+  box-shadow:
+    0 24px 80px rgba(0, 0, 0, 0.34),
+    inset 0 0 0 1px rgba(255, 220, 188, 0.06),
+    0 0 0 1px rgba(255, 124, 31, 0.05);
+  backdrop-filter: blur(14px);
+  transform-style: preserve-3d;
+  transition:
+    transform 0.22s ease,
+    box-shadow 0.3s ease,
+    border-color 0.3s ease,
+    background 0.3s ease;
+}
+
+.ember-card-glass::before,
+.ember-surface::before,
+.ember-hero-frame::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  background:
+    radial-gradient(circle at var(--pointer-x, 50%) var(--pointer-y, 50%), rgba(255, 166, 93, 0.18), transparent 28%),
+    linear-gradient(135deg, rgba(255, 209, 170, 0.18), transparent 18%, transparent 82%, rgba(255, 158, 76, 0.18));
+  pointer-events: none;
+}
+
+.ember-card-content,
+.ember-hero-copy,
+.ember-metric-pill,
+.ember-footer-top {
+  position: relative;
+  z-index: 1;
+}
+
+.ember-hero-media {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.ember-hero-media::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg, rgba(18, 7, 5, 0.34) 0%, rgba(18, 7, 5, 0.18) 24%, rgba(18, 7, 5, 0.02) 56%, rgba(18, 7, 5, 0.1) 100%),
+    linear-gradient(180deg, rgba(18, 7, 5, 0), rgba(18, 7, 5, 0.08));
+}
+
+.ember-hero-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  opacity: 0.96;
+  transform: translateZ(0) scale(1.01);
+  filter: none;
+}
+
+/* .ember-hero-frame {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  align-items: center;
+  gap: 28px;
+  min-height: 560px;
+  padding: 56px;
+} */
+.ember-hero-frame {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: 650px;
+  padding: 60px;
+  overflow: hidden;
+
+  background:
+    linear-gradient(
+      90deg,
+      rgba(255,247,233,0.95) 0%,
+      rgba(255,247,233,0.75) 35%,
+      rgba(255,247,233,0.20) 65%,
+      rgba(255,247,233,0.05) 100%
+    ),
+    url("/images/home-light.png") center center / cover no-repeat;
+}
+
+
+
+.ember-divider,
+.catalog-title-line {
+  position: absolute;
+  left: 28px;
+  right: 28px;
+  top: 18px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(255, 142, 53, 0.9), transparent);
+  box-shadow: 0 0 18px rgba(255, 131, 36, 0.3);
+}
+
+.ember-kicker,
+.ember-mini-kicker,
+.ember-section-title span {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 192, 142, 0.18);
+  background: rgba(255, 248, 240, 0.05);
+  color: rgba(255, 205, 173, 0.82);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: 0.74rem;
+}
+
+.ember-hero-copy h1,
+.ember-section-title h2,
+.ember-story-media-content h3,
+.ember-newsletter-card h3,
+.ember-contact-card h3 {
+  margin: 18px 0 16px;
+  font-family: "Cormorant Garamond", serif;
+  font-weight: 700;
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+  color: #ffd9b4;
+}
+
+.ember-hero-copy h1 {
+  font-size: clamp(3rem, 7vw, 5.6rem);
+}
+
+.ember-hero-copy h1 span {
+  color: #fff1df;
+}
+
+.ember-reveal {
+  opacity: 0;
+  transform: translate3d(0, 24px, 0);
+  transition:
+    opacity 0.55s ease,
+    transform 0.55s ease;
+  transition-delay: var(--reveal-delay, 0s);
+}
+
+.ember-reveal.is-visible {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+
+.ember-hero-copy p,
+.ember-section-title p,
+.ember-product-copy p,
+.ember-product-card-copy p,
+.ember-reason-card p,
+.ember-story-media-content p,
+.ember-story-mini-content p,
+.ember-testimonial-card p,
+.ember-newsletter-card p,
+.ember-contact-card li,
+.ember-metric-pill span {
+  color: rgba(255, 221, 197, 0.72);
+  line-height: 1.75;
+}
+
+.ember-hero-copy p {
+  max-width: 560px;
+  font-size: 1.02rem;
+  text-wrap: pretty;
+}
+
+.ember-hero-trust {
+  margin-top: 18px;
+  color: rgba(255, 233, 214, 0.86);
+  font-size: 0.95rem;
+}
+
+.ember-hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 26px;
+}
+
+.ember-hero-product-card {
+  min-height: 380px;
+  align-self: stretch;
+  background: linear-gradient(180deg, rgba(41, 17, 11, 0.5), rgba(22, 8, 6, 0.6));
+  backdrop-filter: blur(18px);
+}
+
+.ember-spotlight-stage {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+  align-items: center;
+  min-height: 300px;
+  padding: 26px 26px 12px;
+}
+
+.ember-spotlight-swap {
+  animation: emberSpotlightSwap 1.45s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.ember-spotlight-copy {
+  animation: emberSpotlightCopy 1.55s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.ember-spotlight-visual {
+  animation: emberSpotlightVisual 1.65s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.ember-spotlight-stage .ember-product-copy,
+.ember-spotlight-stage .ember-product-visual {
+  min-width: 0;
+}
+
+.ember-spotlight-stage .ember-product-copy h3 {
+  margin: 16px 0 14px;
+  font-size: 1.9rem;
+  line-height: 1;
+}
+
+.ember-spotlight-stage .ember-product-copy p {
+  margin: 0;
+  max-width: 100%;
+  min-height: 146px;
+}
+
+.ember-spotlight-stage .ember-product-copy strong {
+  display: inline-block;
+  margin-top: 18px;
+}
+
+.ember-product-trust {
+  display: block;
+  margin-top: 16px;
+  color: rgba(255, 209, 168, 0.82);
+  line-height: 1.6;
+}
+
+.ember-spotlight-tabs {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 12px;
+  padding: 0 22px 22px;
+}
+
+.ember-spotlight-tabs button {
+  min-height: 40px;
+  padding: 0 16px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 190, 140, 0.16);
+  background: rgba(255, 248, 240, 0.04);
+  color: rgba(255, 219, 195, 0.72);
+  transition:
+    transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    color 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    background 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  white-space: nowrap;
+}
+
+.ember-spotlight-tabs button:hover,
+.ember-spotlight-tabs button.active {
+  color: #fff1df;
+  border-color: rgba(255, 176, 106, 0.34);
+  background: rgba(255, 120, 28, 0.12);
+  transform: translateY(-1px);
+  box-shadow: 0 10px 24px rgba(255, 114, 16, 0.12);
+}
+
+.ember-product-card .ember-button-secondary:hover,
+.ember-product-card .ember-button-secondary:focus-visible {
+  background: linear-gradient(180deg, #f27b23 0%, #d7581f 100%);
+  border-color: rgba(255, 176, 106, 0.32);
+  color: #fff4e6;
+}
+
+.ember-product-copy h3,
+.ember-product-card-copy h3,
+.ember-reason-card h3,
+.ember-story-mini-content h3,
+.ember-testimonial-card strong {
+  margin: 14px 0 10px;
+  color: #ffe3c6;
+}
+
+.ember-product-copy strong,
+.ember-metric-pill strong {
+  color: #ffb56f;
+}
+
+.ember-product-visual,
+.ember-product-image-shell,
+.ember-story-media-content img,
+.ember-story-mini-content img,
+.catalog-card-image,
+.detail-media-inner img {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.ember-product-visual,
+.ember-product-image-shell {
+  padding: 18px;
+  border-radius: 24px;
+  border: 1px solid rgba(255, 190, 140, 0.12);
+  background: linear-gradient(180deg, rgba(255, 248, 240, 0.06), rgba(255, 148, 61, 0.04));
+}
+
+.ember-product-visual img,
+.ember-product-image-shell img,
+.ember-story-media-content img,
+.ember-story-mini-content img,
+.catalog-card-image img,
+.detail-media-inner img {
+  max-width: 100%;
+  max-height: 300px;
+  border-radius: 24px;
+  filter: drop-shadow(0 26px 26px rgba(0, 0, 0, 0.32));
+  animation: emberFloat 10s ease-in-out infinite;
+}
+
+.ember-story-media-content img,
+.ember-story-mini-content img {
+  padding: 12px;
+  background: linear-gradient(180deg, rgba(255, 248, 240, 0.07), rgba(255, 146, 58, 0.05));
+  border: 1px solid rgba(255, 190, 140, 0.12);
+}
+
+.ember-hero-orbit {
+  position: absolute;
+  top: 50%;
+  width: 160px;
+  height: 160px;
+  display: grid;
+  place-items: center;
+  border-radius: 26px;
+  border: 1px solid rgba(255, 184, 120, 0.14);
+  background: rgba(255, 248, 240, 0.05);
+  box-shadow: 0 0 40px rgba(255, 115, 20, 0.08);
+  transform: translateY(-50%);
+}
+
+.ember-hero-orbit img {
+  width: 100%;
+  max-width: 130px;
+  animation-delay: 1s;
+}
+
+.ember-hero-orbit-left {
+  left: -46px;
+}
+
+.ember-hero-orbit-right {
+  right: -46px;
+}
+
+.ember-metrics-row,
+.ember-product-grid,
+.ember-reason-grid,
+.ember-testimonial-grid,
+.ember-contact-grid {
+  display: grid;
+  gap: 20px;
+}
+
+.ember-metrics-row {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-top: 24px;
+}
+
+.ember-metric-pill {
+  padding: 22px;
+  border-radius: 24px;
+}
+
+.ember-metric-pill strong {
+  display: block;
+  font-size: 1.4rem;
+}
+
+.ember-section {
+  padding: 80px 0 0;
+}
+
+.ember-section:not(.ember-hero) {
+  content-visibility: auto;
+  contain-intrinsic-size: 720px;
+}
+
+.ember-section-title {
+  max-width: 720px;
+  margin: 0 auto 34px;
+  text-align: center;
+}
+
+.ember-section-title.left {
+  margin-left: 0;
+  text-align: left;
+}
+
+.ember-section-title h2 {
+  font-size: clamp(2.4rem, 5vw, 4rem);
+}
+
+.ember-live-banner-section {
+  padding-top: 42px;
+}
+
+.ember-live-banner-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.ember-live-banner {
+  min-height: 280px;
+  border-radius: 24px;
+  overflow: hidden;
+  background-size: cover;
+  background-position: center;
+  border: 1px solid rgba(255, 222, 176, 0.18);
+}
+
+.ember-live-banner .ember-card-content {
+  min-height: 280px;
+  max-width: 560px;
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 12px;
+}
+
+.ember-live-banner span,
+.ember-product-card-copy strong {
+  color: var(--ember-gold);
+  font-weight: 800;
+}
+
+.ember-live-banner h2 {
+  max-width: 12ch;
+  font-size: clamp(2rem, 4vw, 3.5rem);
+  line-height: 0.98;
+}
+
+.ember-live-banner p {
+  max-width: 52ch;
+  color: rgba(255, 240, 223, 0.82);
+  line-height: 1.7;
+}
+
+.ember-live-banner strong {
+  color: #fef3c7;
+}
+
+.ember-product-grid,
+.ember-reason-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.ember-product-grid-featured {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.ember-product-card,
+.ember-reason-card,
+.ember-testimonial-card,
+.ember-story-mini,
+.ember-newsletter-card,
+.ember-contact-card {
+  height: 100%;
+}
+
+.ember-product-card .ember-card-content,
+.ember-reason-card .ember-card-content,
+.ember-testimonial-card .ember-card-content,
+.ember-newsletter-card .ember-card-content,
+.ember-contact-card .ember-card-content,
+.ember-story-mini .ember-card-content,
+.ember-story-media .ember-card-content {
+  padding: 22px;
+  height: 100%;
+}
+
+.ember-testimonial-card .ember-card-content,
+.ember-reason-card .ember-card-content,
+.ember-newsletter-card .ember-card-content,
+.ember-contact-card .ember-card-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.ember-product-card-copy p span {
+  color: rgba(255, 187, 131, 0.5);
+}
+
+.ember-product-points {
+  margin: 16px 0 14px;
+  padding-left: 18px;
+  color: rgba(255, 229, 210, 0.78);
+  line-height: 1.8;
+}
+
+.ember-product-points li + li {
+  margin-top: 4px;
+}
+
+.ember-reason-icon {
+  display: inline-grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  background: radial-gradient(circle at center, rgba(255, 152, 51, 0.32), rgba(255, 120, 28, 0.08));
+  color: #ffc38c;
+  font-weight: 800;
+  box-shadow: 0 0 24px rgba(255, 119, 20, 0.18);
+}
+
+.ember-reason-card strong,
+.ember-testimonial-card span {
+  color: rgba(255, 190, 148, 0.7);
+}
+
+.ember-trust-point-card {
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  min-height: 170px;
+}
+
+.ember-trust-point-card h3 {
+  margin: 0;
+}
+
+.ember-story-layout {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 20px;
+}
+
+.ember-story-media-content {
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr;
+  gap: 20px;
+  align-items: center;
+}
+
+.ember-story-stack {
+  display: grid;
+  gap: 20px;
+}
+
+.ember-story-mini-content {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 16px;
+  align-items: center;
+}
+
+.ember-story-mini-content img {
+  max-height: 132px;
+}
+
+.ember-stars {
+  color: #ffb24d;
+  letter-spacing: 0.16em;
+}
+
+.ember-testimonial-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.ember-contact-grid {
+  grid-template-columns: 1.1fr 0.9fr;
+}
+
+.ember-inline-form {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.ember-inline-form input {
+  min-height: 48px;
+  padding: 0 16px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 185, 136, 0.18);
+  background: rgba(255, 248, 240, 0.06);
+  color: #fff0e0;
+}
+
+.ember-inline-form input:focus-visible {
+  outline: 0;
+  border-color: rgba(255, 150, 70, 0.5);
+  box-shadow: 0 0 20px rgba(255, 122, 30, 0.18);
+}
+
+.ember-contact-card ul {
+  margin: 18px 0 24px;
+  padding: 0;
+  list-style: none;
+}
+
+.ember-contact-card li + li {
+  margin-top: 10px;
+}
+
+.ember-footer {
+  padding: 34px 0 56px;
+}
+
+.ember-footer-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 22px 26px;
+  border-radius: 24px;
+  border: 1px solid rgba(255, 185, 136, 0.16);
+  background: rgba(27, 11, 8, 0.7);
+}
+
+.ember-footer-notes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.ember-footer-notes span {
+  padding: 10px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 185, 136, 0.14);
+  color: rgba(255, 219, 195, 0.72);
+}
+
+@keyframes emberFloat {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-7px);
+  }
+}
+
+@keyframes emberSpotlightSwap {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 18px, 0) scale(0.985);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+@keyframes emberSpotlightCopy {
+  from {
+    opacity: 0;
+    transform: translate3d(-20px, 0, 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes emberSpotlightVisual {
+  from {
+    opacity: 0;
+    transform: translate3d(20px, 0, 0) scale(0.97);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+@media (max-width: 1100px) {
+  .ember-nav {
+    display: none;
+  }
+
+  .ember-menu-toggle,
+  .ember-mobile-nav {
+    display: block;
+  }
+
+  .ember-mobile-nav {
+    max-height: 0;
+    overflow: hidden;
+    margin-top: 10px;
+    padding: 0 18px;
+    border-radius: 24px;
+    border: 1px solid transparent;
+    background: rgba(22, 8, 6, 0.94);
+    transition:
+      max-height 0.55s cubic-bezier(0.16, 1, 0.3, 1),
+      padding 0.55s cubic-bezier(0.16, 1, 0.3, 1),
+      border-color 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .ember-mobile-nav.open {
+    max-height: 360px;
+    padding: 16px 18px;
+    border-color: rgba(255, 192, 142, 0.18);
+    box-shadow: 0 18px 34px rgba(0, 0, 0, 0.26);
+  }
+
+  .ember-mobile-nav button,
+  .ember-mobile-nav a {
+    display: block;
+    width: 100%;
+    padding: 10px 0;
+    text-align: left;
+  }
+
+  .ember-hero-frame,
+  .ember-story-layout,
+  .ember-contact-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ember-spotlight-stage {
+    grid-template-columns: 1fr;
+  }
+
+  .ember-spotlight-tabs {
+    flex-wrap: wrap;
+  }
+
+  .ember-product-grid,
+  .ember-reason-grid,
+  .ember-live-banner-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .ember-testimonial-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 720px) {
+  .ember-page,
+  .ember-footer {
+    width: min(100%, calc(100% - 20px));
+  }
+
+  .ember-navbar {
+    width: 100%;
+    padding-top: 12px;
+  }
+
+  .ember-page {
+    padding-top: 36px;
+  }
+
+  .ember-navbar-inner {
+    padding: 10px 12px;
+  }
+
+  .ember-navbar-media {
+    background-position: center, center 34%;
+    background-size: cover, 140% auto;
+  }
+
+  .ember-navbar.scrolled {
+    padding-top: 0;
+  }
+
+  .ember-nav-actions .ember-button {
+    display: none;
+  }
+
+  .ember-navbar-spacer {
+    height: 92px;
+  }
+
+  .ember-hero {
+    padding-top: 2px;
+  }
+
+  .ember-hero-frame {
+    padding: 26px 22px;
+    min-height: auto;
+    gap: 22px;
+  }
+
+  .ember-hero-copy h1 {
+    font-size: clamp(3.1rem, 16vw, 4.8rem);
+  }
+
+  .ember-hero-copy p {
+    font-size: 0.98rem;
+  }
+
+  .ember-hero-product-card {
+    min-height: auto;
+  }
+
+  .ember-spotlight-stage {
+    padding: 20px 20px 8px;
+  }
+
+  .ember-metrics-row,
+  .ember-product-grid,
+  .ember-reason-grid,
+  .ember-live-banner-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ember-live-banner,
+  .ember-live-banner .ember-card-content {
+    min-height: 240px;
+  }
+
+  .ember-live-banner .ember-card-content {
+    padding: 22px;
+  }
+
+  .ember-story-media-content,
+  .ember-story-mini-content,
+  .ember-inline-form,
+  .ember-footer-top {
+    grid-template-columns: 1fr;
+    display: grid;
+  }
+
+  .ember-footer-top {
+    justify-content: flex-start;
+  }
+}
+
+/* Spice Root reference storefront polish */
+.ember-home-shell {
+  background:
+    radial-gradient(circle at 0% 14%, rgba(90, 132, 52, 0.14), transparent 20%),
+    radial-gradient(circle at 100% 10%, rgba(176, 108, 37, 0.13), transparent 18%),
+    linear-gradient(180deg, #fff8ed 0%, #fff4e4 46%, #fff8ed 100%);
+}
+
+.ember-page,
+.ember-footer {
+  width: min(1370px, calc(100% - 38px));
+}
+
+.ember-navbar {
+  padding: 0;
+  background: rgba(255, 248, 237, 0.94);
+  border-bottom: 1px solid var(--sr-border);
+  backdrop-filter: blur(18px);
+}
+
+.ember-navbar-inner {
+  width: min(1370px, calc(100% - 38px));
+  min-height: 92px;
+  padding: 14px 0;
+  border: 0;
+  background: transparent;
+}
+
+.ember-brand {
+  gap: 13px;
+}
+
+.ember-brand::before {
+  width: 50px;
+  height: 50px;
+  border-radius: 10px 28px 10px 28px;
+  background:
+    radial-gradient(circle at 45% 30%, rgba(255, 248, 237, 0.7) 0 10%, transparent 11%),
+    linear-gradient(135deg, #5f8a36 0 42%, #1f4a25 43% 100%);
+}
+
+.ember-brand strong {
+  font-size: clamp(1.9rem, 3vw, 2.55rem);
+  line-height: 0.95;
+}
+
+.ember-brand small {
+  display: block;
+  margin-top: 3px;
+  color: var(--sr-text);
+  font-size: 0.92rem;
+  font-weight: 700;
+}
+
+.ember-nav {
+  gap: clamp(18px, 2.5vw, 34px);
+}
+
+.ember-nav button,
+.ember-nav a {
+  color: #11170f;
+  font-weight: 700;
+}
+
+.ember-nav button::after,
+.ember-nav a::after {
+  bottom: -6px;
+  height: 2px;
+  background: var(--sr-spice);
+}
+
+.ember-icon-button {
+  width: 46px;
+  height: 46px;
+  border-radius: 12px;
+}
+
+.ember-nav-actions .ember-button {
+  gap: 10px;
+  min-height: 46px;
+  padding: 0 18px;
+  border-radius: 12px;
+  font-size: 1rem;
+}
+
+.ember-navbar-spacer {
+  height: 104px;
+}
+
+.ember-hero-frame {
+  min-height: 455px;
+  margin-top: 0;
+  border-radius: 0;
+  border-width: 0 0 1px;
+  box-shadow: none;
+  background:
+    linear-gradient(90deg, rgba(255, 248, 237, 0.98) 0%, rgba(255, 248, 237, 0.92) 35%, rgba(255, 248, 237, 0.18) 62%, rgba(255, 248, 237, 0) 100%),
+    url("/images/home-light.png") right center / contain no-repeat,
+    #fff8ed;
+}
+
+.ember-hero-reference,
+.ember-hero-frame::after {
+  display: none;
+}
+
+.ember-hero-copy h1 {
+  max-width: 620px;
+  font-size: clamp(4rem, 7.8vw, 6.7rem);
+  line-height: 0.92;
+  color: var(--sr-heading);
+}
+
+.ember-hero-copy h1 span {
+  color: var(--sr-spice);
+}
+
+.ember-hero-copy p {
+  max-width: 560px;
+  color: var(--sr-text);
+  font-size: 1.2rem;
+}
+
+.ember-hero-actions .ember-button {
+  min-width: 170px;
+}
+
+.ember-trust-band {
+  width: min(1260px, calc(100% - 38px));
+  margin: 0 auto 20px;
+  transform: translateY(-18px);
+  border-radius: 14px;
+}
+
+.ember-trust-item {
+  grid-template-columns: 54px 1fr;
+  justify-items: start;
+  min-height: 94px;
+  text-align: left;
+}
+
+.ember-trust-item span {
+  grid-row: span 2;
+  width: 48px;
+  height: 48px;
+  color: var(--sr-spice);
+}
+
+.ember-section {
+  padding-top: 58px;
+}
+
+.ember-section-title {
+  max-width: 980px;
+  margin-bottom: 24px;
+}
+
+.ember-section-title h2 {
+  margin: 0;
+  font-size: clamp(2.8rem, 6vw, 5rem);
+  line-height: 0.96;
+}
+
+.ember-section-title p {
+  color: var(--sr-text);
+  font-size: 1.12rem;
+}
+
+.ember-category-grid {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.ember-category-card {
+  position: relative;
+  overflow: hidden;
+  min-height: 150px;
+  border: 1px solid var(--sr-border);
+  border-radius: 12px;
+  background: var(--sr-surface);
+  box-shadow: var(--sr-shadow);
+}
+
+.ember-category-card img {
+  width: 100%;
+  height: 96px;
+  object-fit: cover;
+}
+
+.ember-category-card strong {
+  display: block;
+  padding: 10px 44px 10px 16px;
+  color: var(--sr-heading);
+  font-family: "Cormorant Garamond", serif;
+  font-size: 1.35rem;
+  line-height: 1;
+}
+
+.ember-category-card span {
+  position: absolute;
+  right: 12px;
+  bottom: 9px;
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--sr-green);
+  color: #fff8ed;
+  font-weight: 900;
+}
+
+.ember-card-glass,
+.ember-surface {
+  border-radius: 14px;
+  background: rgba(255, 252, 244, 0.92);
+}
+
+.ember-reason-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.ember-reason-card .ember-card-content {
+  align-items: center;
+  min-height: 310px;
+  text-align: center;
+}
+
+.ember-reason-icon {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: var(--sr-green);
+  color: #fff8ed;
+}
+
+.ember-story-layout {
+  grid-template-columns: 1.08fr 0.92fr;
+}
+
+.ember-story-media-content {
+  grid-template-columns: 1fr 0.95fr;
+  padding: 0;
+}
+
+.ember-story-media-content > img {
+  width: 100%;
+  height: 560px;
+  max-height: none;
+  padding: 0;
+  object-fit: cover;
+  border-radius: 14px 0 0 14px;
+}
+
+.ember-story-media-content > div {
+  padding: 34px;
+}
+
+.ember-story-mini-content {
+  grid-template-columns: 260px 1fr;
+  gap: 0;
+}
+
+.ember-story-mini-content img {
+  width: 100%;
+  height: 250px;
+  max-height: none;
+  padding: 0;
+  object-fit: cover;
+  border-radius: 14px 0 0 14px;
+}
+
+.ember-story-mini-content > div {
+  padding: 28px;
+}
+
+.ember-testimonial-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.ember-testimonial-card .ember-card-content {
+  align-items: center;
+  min-height: 270px;
+  text-align: center;
+}
+
+.ember-contact-grid {
+  grid-template-columns: 1fr;
+}
+
+.ember-contact-card .ember-card-content {
+  min-height: 150px;
+  display: grid;
+  grid-template-columns: 0.9fr 1fr auto;
+  align-items: center;
+  gap: 24px;
+}
+
+@media (max-width: 1100px) {
+  .ember-navbar-inner {
+    min-height: 78px;
+  }
+
+  .ember-category-grid,
+  .ember-reason-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .ember-story-layout,
+  .ember-story-media-content,
+  .ember-story-mini-content,
+  .ember-contact-card .ember-card-content {
+    grid-template-columns: 1fr;
+  }
+
+  .ember-story-media-content > img,
+  .ember-story-mini-content img {
+    height: 320px;
+    border-radius: 14px 14px 0 0;
+  }
+}
+
+@media (max-width: 720px) {
+  .ember-page,
+  .ember-footer,
+  .ember-navbar-inner,
+  .ember-trust-band {
+    width: min(100%, calc(100% - 20px));
+  }
+
+  .ember-navbar-inner {
+    padding-right: 60px;
+  }
+
+  .ember-brand::before {
+    width: 40px;
+    height: 40px;
+  }
+
+  .ember-brand strong {
+    font-size: 1.6rem;
+  }
+
+  .ember-brand small {
+    font-size: 0.76rem;
+  }
+
+  .ember-hero-frame {
+    min-height: 580px;
+    background-position: 62% 100%;
+    background-size: 165% auto;
+  }
+
+  .ember-hero-copy h1 {
+    font-size: clamp(3.1rem, 15vw, 4.4rem);
+  }
+
+  .ember-category-grid,
+  .ember-reason-grid,
+  .ember-testimonial-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ember-reveal,
+  .ember-reveal.is-visible,
+  .ember-product-visual img,
+  .ember-product-image-shell img,
+  .ember-story-media-content img,
+  .ember-story-mini-content img,
+  .catalog-card-image img,
+  .detail-media-inner img,
+  .ember-spotlight-swap,
+  .ember-spotlight-copy,
+  .ember-spotlight-visual {
+    animation: none;
+    transition: none;
+    transform: none;
+    opacity: 1;
+  }
+}
+
+/* Reference UI theme layer */
+.ember-home-shell {
+  background:
+    radial-gradient(circle at top right, color-mix(in srgb, var(--sr-green) 10%, transparent), transparent 36%),
+    var(--sr-bg);
+  color: var(--sr-text);
+}
+
+:root[data-theme="dark"] .ember-home-shell {
+  background:
+    radial-gradient(circle at top right, rgba(111, 156, 57, 0.12), transparent 36%),
+    linear-gradient(180deg, #070906 0%, #0b0e08 54%, #050604 100%);
+}
+
+.ember-noise {
+  opacity: 0;
+}
+
+.ember-navbar-inner {
+  min-height: 70px;
+  padding: 14px 88px 14px 18px;
+  border-radius: 0;
+  border: 0;
+  border-bottom: 1px solid var(--sr-border);
+  background: color-mix(in srgb, var(--sr-bg) 90%, transparent);
+  box-shadow: none;
+}
+
+.ember-navbar-media,
+.ember-navbar-media::after {
+  display: none;
+}
+
+.ember-brand {
+  color: var(--sr-heading);
+}
+
+.ember-brand::before,
+.catalog-brand::before,
+.auth-back-link::before {
+  content: "";
+  width: 24px;
+  height: 24px;
+  border-radius: 7px 18px 7px 18px;
+  background:
+    linear-gradient(135deg, #8cc63f 0 42%, #4f7f1f 43% 100%);
+  box-shadow: inset -6px -2px 0 rgba(255, 255, 255, 0.2);
+  flex: 0 0 auto;
+}
+
+.ember-brand strong {
+  font-size: 1.25rem;
+}
+
+.ember-brand small {
+  display: none;
+}
+
+.ember-nav button,
+.ember-nav a,
+.ember-mobile-nav button,
+.ember-mobile-nav a {
+  color: var(--sr-text-soft);
+  font-size: 0.86rem;
+}
+
+.ember-nav button:hover,
+.ember-nav button.active,
+.ember-nav a.active,
+.ember-nav a:hover,
+.ember-user-greeting {
+  color: var(--sr-heading);
+}
+
+.ember-nav button::after,
+.ember-nav a::after {
+  background: var(--sr-green);
+}
+
+.ember-icon-button,
+.ember-menu-toggle {
+  border-color: var(--sr-border);
+  background: var(--sr-surface);
+  color: var(--sr-heading);
+}
+
+.ember-button {
+  min-height: 42px;
+  border-radius: 12px;
+  border-color: var(--sr-border-strong);
+}
+
+.ember-button-primary {
+  background: linear-gradient(180deg, var(--sr-green) 0%, var(--sr-green-dark) 100%);
+  color: #fffdf5;
+  box-shadow: 0 12px 24px color-mix(in srgb, var(--sr-green) 24%, transparent);
+}
+
+.ember-button-ghost,
+.ember-button-secondary {
+  background: var(--sr-surface);
+  color: var(--sr-heading);
+}
+
+.ember-page {
+  padding-top: 0;
+}
+
+.ember-navbar-spacer {
+  height: 88px;
+}
+
+.ember-hero {
+  padding: 0;
+}
+
+.ember-hero-frame {
+  min-height: min(650px, calc(100vh - 118px));
+  grid-template-columns: minmax(300px, 0.44fr) minmax(0, 0.56fr);
+  padding: clamp(34px, 6vw, 72px);
+  border-radius: 8px;
+  border: 1px solid var(--sr-border);
+  background:
+    var(--sr-hero-overlay),
+    url("/images/home-light.png") right center / cover no-repeat;
+  box-shadow: var(--sr-shadow);
+}
+
+.ember-hero-frame::before {
+  display: none;
+}
+
+:root[data-theme="dark"] .ember-hero-frame {
+  background:
+    var(--sr-hero-overlay),
+    url("/images/home-dark.png") right center / cover no-repeat;
+}
+
+.ember-hero-reference {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: right center;
+  pointer-events: none;
+}
+
+.ember-hero-reference-dark {
+  display: none;
+}
+
+:root[data-theme="dark"] .ember-hero-reference-light {
+  display: none;
+}
+
+:root[data-theme="dark"] .ember-hero-reference-dark {
+  display: block;
+}
+
+.ember-hero-frame::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: var(--sr-hero-overlay);
+  pointer-events: none;
+}
+
+.ember-hero-copy h1 {
+  margin: 0 0 22px;
+  color: var(--sr-heading);
+  font-size: clamp(3.2rem, 7vw, 5.7rem);
+  letter-spacing: 0;
+}
+
+.ember-hero-copy h1 span {
+  color: var(--sr-green);
+}
+
+.ember-hero-copy p {
+  max-width: 430px;
+  color: var(--sr-text-soft);
+  font-size: 1rem;
+}
+
+.ember-trust-band {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0;
+  margin: 18px 0 0;
+  border: 1px solid var(--sr-border);
+  border-radius: 8px;
+  background: var(--sr-surface);
+  box-shadow: var(--sr-shadow);
+  overflow: hidden;
+}
+
+.ember-trust-item {
+  display: grid;
+  place-items: center;
+  gap: 7px;
+  min-height: 112px;
+  padding: 18px 12px;
+  text-align: center;
+  border-right: 1px solid var(--sr-border);
+}
+
+.ember-trust-item:last-child {
+  border-right: 0;
+}
+
+.ember-trust-item span {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  border: 1px solid var(--sr-border-strong);
+  color: var(--sr-green);
+  font-size: 0.65rem;
+  font-weight: 800;
+}
+
+.ember-trust-item strong {
+  color: var(--sr-heading);
+  font-size: 0.9rem;
+}
+
+.ember-trust-item small {
+  color: var(--sr-text-muted);
+}
+
+.ember-hero-frame,
+.ember-card-glass,
+.ember-surface,
+.ember-footer-top {
+  border-radius: 8px;
+  border-color: var(--sr-border);
+  background: var(--sr-surface);
+  color: var(--sr-text);
+  box-shadow: var(--sr-shadow);
+}
+
+.ember-card-glass::before,
+.ember-surface::before {
+  background:
+    radial-gradient(circle at var(--pointer-x, 50%) var(--pointer-y, 50%), color-mix(in srgb, var(--sr-gold) 12%, transparent), transparent 30%),
+    linear-gradient(135deg, color-mix(in srgb, var(--sr-green) 8%, transparent), transparent 35%);
+}
+
+.ember-section-title h2,
+.ember-story-media-content h3,
+.ember-newsletter-card h3,
+.ember-contact-card h3,
+.ember-product-copy h3,
+.ember-product-card-copy h3,
+.ember-reason-card h3,
+.ember-story-mini-content h3,
+.ember-testimonial-card strong,
+.ember-trust-point-card h3 {
+  color: var(--sr-heading);
+  letter-spacing: 0;
+}
+
+.ember-section-title p,
+.ember-product-copy p,
+.ember-product-card-copy p,
+.ember-reason-card p,
+.ember-story-media-content p,
+.ember-story-mini-content p,
+.ember-testimonial-card p,
+.ember-newsletter-card p,
+.ember-contact-card li,
+.ember-product-points {
+  color: var(--sr-text-soft);
+}
+
+.ember-section-title span,
+.ember-mini-kicker,
+.ember-kicker {
+  border-color: var(--sr-border);
+  background: var(--sr-green-soft);
+  color: var(--sr-green-dark);
+}
+
+.ember-product-visual,
+.ember-product-image-shell,
+.ember-story-media-content img,
+.ember-story-mini-content img {
+  border-color: var(--sr-border);
+  background: var(--sr-surface-muted);
+}
+
+.ember-product-copy strong,
+.ember-metric-pill strong,
+.ember-stars {
+  color: var(--sr-gold);
+}
+
+.ember-footer-notes span {
+  border-color: var(--sr-border);
+  color: var(--sr-text-soft);
+}
+
+@media (max-width: 1100px) {
+  .ember-mobile-nav {
+    background: var(--sr-surface-solid);
+  }
+
+  .ember-hero-frame {
+    grid-template-columns: 1fr;
+    min-height: 620px;
+    align-content: start;
+  }
+
+  .ember-trust-band {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 720px) {
+  .ember-navbar-inner {
+    padding-right: 74px;
+  }
+
+  .ember-hero-frame {
+    min-height: 620px;
+    padding: 28px 20px;
+    background-position: 62% center;
+  }
+
+  .ember-hero-copy h1 {
+    font-size: clamp(2.7rem, 14vw, 4.5rem);
+  }
+
+  .ember-trust-band {
+    grid-template-columns: 1fr;
+  }
+
+  .ember-trust-item {
+    border-right: 0;
+    border-bottom: 1px solid var(--sr-border);
+  }
+
+  .ember-trust-item:last-child {
+    border-bottom: 0;
+  }
+}

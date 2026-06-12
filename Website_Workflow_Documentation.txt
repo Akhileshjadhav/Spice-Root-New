@@ -1,0 +1,236 @@
+# Complete End-to-End Website Workflow Documentation
+
+## 1. Project Overview
+Spice Root is an e-commerce web application designed for selling spices with an integrated online catalog, shopping cart, checkout system with Razorpay integration, and an administrative dashboard for managing products, users, orders, and site configurations.
+- Frontend Stack: React, Vite, React Router DOM, Context API for state management.
+- Backend Stack: Node.js, Express API server, Firebase Admin.
+- Database: Firebase Firestore.
+- Authentication: Firebase Authentication (Email/Password & Google OAuth).
+- Payment Gateway: Razorpay (Mock Mode available for testing).
+
+## 2. Complete Site Map
+
+Customer / User Routes (Public & Protected)
+- / - Startup Landing Page (Home)
+- /products - Product Catalog
+- /products/:productId - Product Detail Page
+- /offers - Promotional Offers Page (Protected - User Only)
+- /cart - Shopping Cart Screen (Protected - User Only)
+- /checkout - Order Checkout System (Protected - User Only)
+- /contact - Contact Us Page
+- /login - User Login Page
+- /register - User Registration Page
+- /forgot-password - Password Recovery Page
+- /account - User Account Management (Protected - User Only)
+- /get-started, /home, /features, /about, /testimonials - Internal Redirects & Anchors
+
+Admin Routes (Protected - Admin Only)
+- /admin/login - Administrator Login Page
+- /admin/* - Admin Panel (Protected by AdminRoute wrapper)
+  - /admin/dashboard - Admin Dashboard
+  - /admin/products - Product Management
+  - /admin/best-sellers - Featured Products
+  - /admin/categories - Catalog Categories
+  - /admin/inventory - Stock Control
+  - /admin/orders - Order Processing
+  - /admin/order-details - Detailed Order View
+  - /admin/customers - Customer Directory
+  - /admin/customer-details - Individual Customer Records
+  - /admin/coupons - Discount Codes
+  - /admin/reviews - Product Reviews
+  - /admin/payments - Transaction History
+  - /admin/shipping - Logistics & Shipping
+  - /admin/analytics - Sales Metrics
+  - /admin/queries - Contact Messages
+  - /admin/register-login - Admin Registration Setup
+  - /admin/logs - System Access Logs
+  - /admin/cms - Content Management System
+  - /admin/users - Platform Users
+  - /admin/settings - Admin Settings
+
+## 3. End-to-End User Journey
+1. Discovery & Onboarding: The user lands on the Home (/) page. They navigate to /products to view the catalog.
+2. Registration/Login: To purchase or add to cart, the user navigates to /register or /login. Authentication is handled via Firebase (createUserWithEmailAndPassword or signInWithPopup via Google).
+3. Browsing Products: The user visits /products and clicks on a product to view /products/:productId.
+4. Cart Management: The user adds items to the cart. Cart state is immediately synchronized locally and mapped to Firestore (users/{uid}/cart/current).
+5. Checkout Process:
+   - The user visits /cart to review items and apply coupons (managed by CartContext).
+   - The user proceeds to /checkout.
+   - The client invokes /api/razorpay/create-order to generate a Razorpay order ID.
+   - The Razorpay UI opens. Once paid, the client calls /api/razorpay/verify-payment.
+   - Post payment, /api/orders/inventory-adjustment decreases stock levels for purchased items.
+6. Account Management: The user tracks past orders and updates profile details via /account.
+
+## 4. End-to-End Admin Workflow
+1. Admin Login: Admin logs in at /admin/login. The system verifies their email against VITE_ADMIN_EMAILS or an active record in the admins Firestore collection.
+2. Admin Verification: The frontend calls /api/auth/ensure-admin to ensure synchronization between Firebase Auth and the admin collection.
+3. Dashboard Access: The admin lands on /admin/dashboard to view high-level metrics.
+4. Product/Inventory Management:
+   - The admin navigates to /admin/products.
+   - The page subscribes to the products collection via onSnapshot (Firebase real-time).
+   - The admin can add, edit, or delete products. Deleting a product automatically cascades to remove it from the bestSellers collection.
+5. Order Processing: The admin checks /admin/orders to process newly placed customer orders, update shipping statuses, and track payment verifications.
+
+## 5. Authentication & Authorization
+- Implementation Source: client/src/context/AuthContext.jsx
+- User Authentication: Standard Firebase Email/Password & Google OAuth.
+- Admin Authorization: 
+  - Admin login sets browserSessionPersistence.
+  - Allowed admin emails are checked via VITE_ADMIN_EMAILS allowlist.
+  - Verification with Firestore admins collection (status: 'active').
+  - Roles are locally cached in localStorage under spice-root-auth-session-role.
+- Protected Routes: 
+  - ProtectedRoute component restricts access to non-admins and logged-in users.
+  - AdminRoute restricts access to users possessing the "admin" role.
+
+## 6. Database Analysis (Firestore)
+- users: Stores user profiles.
+  - users/{uid}/cart/current: User's shopping cart synchronized state.
+  - users/{uid}/loginEvents: Audit trail of user logins.
+- admins: Stores admin profiles, roles, and account statuses.
+- products: Product catalog data including arrays of price tiers (1KG, 3KG, 5KG) and total stock.
+- bestSellers: Curated list of top products referencing products documents via sourceProductId.
+- orders: Processed and checked out orders.
+- categories: Defines categories used in /admin/categories.
+- coupons: Discount codes.
+- reviews: User-generated reviews for products.
+
+## 7. Data Flow Analysis
+- Cart Sync Flow: CartContext utilizes a localized state combined with a real-time Firestore listener on users/{uid}/cart/current. Updates (add/remove) are merged and written back using setDoc with { merge: true }.
+- Pricing & Discounts: Client uses utility functions (calculateCouponDiscount, findApplicableCoupon) to determine the subtotal locally, which is then verified implicitly by the order payload sent to Razorpay via the backend.
+- Checkout Data Flow:
+  1. Cart Context -> Checkout Screen.
+  2. Checkout Screen -> Node Express API (/api/razorpay/create-order).
+  3. Node Express API -> Razorpay (creates order, returns Order ID).
+  4. Client -> Razorpay UI (captures payment).
+  5. Client -> Node Express API (/api/razorpay/verify-payment -> crypto verification).
+
+## 8. Component Architecture
+- Pages Directory (client/src/pages, client/src/user/pages, client/src/admin/pages): View layer components mapped directly to routes.
+- Components Directory (client/src/components, client/src/admin/components): Reusable UI elements (e.g., DataTable, ActionButton, AddProductModal).
+- Context API (client/src/context): Business logic layer managing global state (AuthContext, CartContext, ThemeContext).
+- Lib/Utils (client/src/lib): Helper functions (apiClient.js, catalog.js, adminStore.js) for data normalization, export formatting, and Firestore interactions.
+
+## 9. API & Service Mapping
+Located in server/src/routes/router.js and server/src/services:
+- GET /health - System diagnostics.
+- POST /api/auth/ensure-admin - Admin synchronization endpoint.
+- POST /api/orders/inventory-adjustment - Triggers inventory deduction (via inventoryService.js).
+- GET /api/razorpay/config - Fetches Razorpay Key.
+- POST /api/razorpay/create-order - Initializes transaction via razorpayService.js.
+- POST /api/razorpay/verify-payment - Validates the HMAC signature.
+
+## 10. Flowcharts (Mermaid)
+
+```mermaid
+flowchart TD
+    A[Landing Page] --> B{Logged In?}
+    B -- No --> C[Login / Register]
+    B -- Yes --> D[Product Catalog]
+    C --> D
+    D --> E[Product Details]
+    E --> F[Add to Cart]
+    F --> G[Cart Page]
+    G --> H[Apply Coupon]
+    H --> I[Checkout]
+    I --> J[Razorpay Payment]
+    J --> K{Payment Success?}
+    K -- Yes --> L[Verify Signature & Adjust Inventory]
+    L --> M[Order Success Page]
+    K -- No --> N[Payment Failed Page]
+```
+
+## 11. ERD (Mermaid)
+
+```mermaid
+erDiagram
+    USERS ||--o{ CART_ITEMS : contains
+    USERS ||--o{ LOGIN_EVENTS : logs
+    USERS ||--o{ ORDERS : places
+    PRODUCTS ||--o{ CART_ITEMS : referenced_by
+    PRODUCTS ||--o{ BEST_SELLERS : sourceProductId
+    ORDERS ||--o{ PAYMENTS : processed_via
+    ADMINS {
+        string uid
+        string email
+        string status
+        string role
+    }
+    USERS {
+        string uid
+        string email
+        string firstName
+    }
+    PRODUCTS {
+        string id
+        string name
+        number price
+        array priceTiers
+        number stock
+    }
+    ORDERS {
+        string orderId
+        string userId
+        number totalAmount
+    }
+```
+
+## 12. Sequence Diagrams (Mermaid)
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant Frontend
+    participant NodeAPI
+    participant Razorpay
+    participant Firestore
+    
+    User->>Frontend: Clicks Checkout
+    Frontend->>NodeAPI: POST /api/razorpay/create-order
+    NodeAPI->>Razorpay: API Call to generate order
+    Razorpay-->>NodeAPI: Returns Order ID
+    NodeAPI-->>Frontend: Razorpay Order Details
+    Frontend->>User: Opens Razorpay Modal
+    User->>Frontend: Completes Payment
+    Frontend->>NodeAPI: POST /api/razorpay/verify-payment
+    NodeAPI-->>Frontend: Signature Verified
+    Frontend->>NodeAPI: POST /api/orders/inventory-adjustment
+    NodeAPI->>Firestore: Deduct Stock
+    Frontend->>User: Show Success
+```
+
+## 13. Architecture Diagram (Mermaid)
+
+```mermaid
+architecture-beta
+    group SpiceRoot[Spice Root Platform]
+    
+    service Client[Vite React Frontend]
+    service NodeServer[Express Node.js Server]
+    service Firestore[Firebase Firestore DB]
+    service Auth[Firebase Authentication]
+    service Razorpay[Razorpay Payment Gateway]
+
+    Client -- NodeServer : REST API Calls
+    Client -- Firestore : Direct Read/Write via Firebase SDK
+    Client -- Auth : OAuth/Email Authentication
+    NodeServer -- Razorpay : Server-to-Server Payment API
+    NodeServer -- Firestore : Admin SDK Updates
+```
+
+## 14. Business Logic Analysis
+- Pricing Strategy: Managed in Products.jsx utilizing tiered pricing (1 KG Base Price, 3 KG Discount, 5 KG Discount). Calculated iteratively based on predefined percentages.
+- Coupon Logic: Analyzed securely in CartContext.jsx via calculateCouponDiscount(). Discounts are mapped linearly against cart subtotals and validated against dynamic constraints.
+- Cart Merging: Guest carts stored in localStorage are automatically hydrated and merged with remote Firestore carts upon successful login using mergeCartItems() resolving item key overlaps by retaining the max quantity.
+
+## 15. Missing or Broken Flows
+- Error Boundaries: React Error boundaries are minimal; large data fetch failures (e.g. Firebase rules rejection) just show inline string errors.
+- Atomic Order Creation: Inventory is adjusted *after* payment via a separate API call (/api/orders/inventory-adjustment). If the user drops connection between verification and adjustment, inventory might desync. A robust webhook system via Razorpay directly to the backend would mitigate this risk.
+- Soft Deletes vs Hard Deletes: The codebase currently utilizes explicit deleteDoc calls for products. Relying heavily on hard deletes risks breaking historical order references pointing to those product IDs.
+
+## 16. Final Master Workflow
+1. User interacts with Client (React).
+2. Data syncs bi-directionally between Client and Firestore DB.
+3. Admin logs into the Client using Firebase Auth session tokens, granted access via Node API Middleware.
+4. Order requests flow from Client to Node Server, integrating tightly with Razorpay.
+5. Validated orders commit final inventory decrements dynamically via the Express Server to Firestore, ensuring a closed-loop system encompassing Browsing -> Cart -> Checkout -> Fulfillment -> Inventory Restocking.

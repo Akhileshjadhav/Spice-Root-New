@@ -1,0 +1,25 @@
+{
+  "name": "spice-root",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node -e \"const {spawn}=require('node:child_process'); const procs=[['server',['run','dev'],'server'],['client',['run','dev'],'client']].map(([name,args,cwd])=>{const p=spawn('npm',args,{cwd,stdio:'inherit',shell:true}); p.on('exit',code=>{if(code) console.error(name+' exited with code '+code)}); return p}); process.on('SIGINT',()=>{for(const p of procs) p.kill(); process.exit(0)});\"",
+    "client:dev": "node -e \"const {spawnSync}=require('node:child_process'); const r=spawnSync(process.execPath,['node_modules/vite/bin/vite.js','--host','0.0.0.0','--configLoader','native'],{cwd:'client',stdio:'inherit'}); process.exit(r.status ?? 1)\"",
+    "server:install": "npm --prefix server install",
+    "server:dev": "node --watch server/index.js",
+    "build": "node -e \"const {spawnSync}=require('node:child_process'); const r=spawnSync(process.execPath,['node_modules/vite/bin/vite.js','build','--configLoader','native'],{cwd:'client',stdio:'inherit'}); process.exit(r.status ?? 1)\"",
+    "client:build": "node -e \"const {spawnSync}=require('node:child_process'); const r=spawnSync(process.execPath,['node_modules/vite/bin/vite.js','build','--configLoader','native'],{cwd:'client',stdio:'inherit'}); process.exit(r.status ?? 1)\"",
+    "server:start": "node server/index.js",
+    "check:deploy": "node scripts/check-deployment-env.mjs",
+    "deploy:firebase": "firebase deploy --only firestore,storage",
+    "lint": "node -e \"const {spawnSync}=require('node:child_process'); const r=spawnSync(process.execPath,['node_modules/eslint/bin/eslint.js','src','vite.config.js','eslint.config.js'],{cwd:'client',stdio:'inherit'}); process.exit(r.status ?? 1)\""
+  },
+  "engines": {
+    "node": ">=20.19.0"
+  },
+  "dependencies": {
+    "jspdf": "^4.2.1",
+    "jspdf-autotable": "^5.0.8"
+  }
+}

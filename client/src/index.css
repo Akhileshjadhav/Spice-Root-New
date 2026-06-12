@@ -1,0 +1,302 @@
+@import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap");
+
+:root {
+  color-scheme: light;
+  font-family: "Manrope", sans-serif;
+  background: #faf8f4;
+  color: #1f2118;
+  --sr-bg: #fff8ed;
+  --sr-bg-soft: #f7eddc;
+  --sr-surface: rgba(255, 252, 244, 0.9);
+  --sr-surface-solid: #ffffff;
+  --sr-surface-muted: #f4ead8;
+  --sr-border: rgba(87, 58, 24, 0.16);
+  --sr-border-strong: rgba(35, 64, 30, 0.28);
+  --sr-text: #201b13;
+  --sr-text-soft: rgba(32, 27, 19, 0.72);
+  --sr-text-muted: rgba(32, 27, 19, 0.56);
+  --sr-heading: #18321e;
+  --sr-green: #1f4a25;
+  --sr-green-dark: #183b1d;
+  --sr-green-soft: #e7ecd7;
+  --sr-gold: #b06c25;
+  --sr-spice: #a44716;
+  --sr-shadow: 0 18px 42px rgba(70, 45, 20, 0.12);
+  --sr-hero-image: url("/images/home-light.png");
+  --sr-hero-overlay:
+    linear-gradient(90deg, rgba(250, 248, 244, 0.98) 0%, rgba(250, 248, 244, 0.88) 36%, rgba(250, 248, 244, 0.26) 64%, rgba(250, 248, 244, 0.04) 100%);
+  --sr-offers-hero-overlay:
+    linear-gradient(90deg, rgba(250, 248, 244, 0.96) 0%, rgba(250, 248, 244, 0.82) 48%, rgba(250, 248, 244, 0.18) 100%);
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --sr-bg: #070906;
+  --sr-bg-soft: #10150d;
+  --sr-surface: rgba(19, 23, 15, 0.84);
+  --sr-surface-solid: #11150e;
+  --sr-surface-muted: #171d11;
+  --sr-border: rgba(230, 183, 98, 0.14);
+  --sr-border-strong: rgba(230, 183, 98, 0.26);
+  --sr-text: #f6ead7;
+  --sr-text-soft: rgba(246, 234, 215, 0.72);
+  --sr-text-muted: rgba(246, 234, 215, 0.56);
+  --sr-heading: #fff4df;
+  --sr-green: #6f9c39;
+  --sr-green-dark: #87b54c;
+  --sr-green-soft: rgba(84, 123, 35, 0.2);
+  --sr-gold: #f3b34f;
+  --sr-spice: #e56d2b;
+  --sr-shadow: 0 22px 70px rgba(0, 0, 0, 0.42);
+  --sr-hero-image: url("/images/home-dark.png");
+  --sr-hero-overlay:
+    linear-gradient(90deg, rgba(7, 9, 6, 0.98) 0%, rgba(7, 9, 6, 0.86) 36%, rgba(7, 9, 6, 0.28) 66%, rgba(7, 9, 6, 0.04) 100%);
+  --sr-offers-hero-overlay:
+    linear-gradient(90deg, rgba(7, 9, 6, 0.98) 0%, rgba(7, 9, 6, 0.78) 48%, rgba(7, 9, 6, 0.2) 100%);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  max-width: 100%;
+  overflow-x: clip;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  max-width: 100%;
+  overflow-x: clip;
+  background: var(--sr-bg);
+  color: var(--sr-text);
+  font-family: "Manrope", sans-serif;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.site-footer {
+  margin-top: 52px;
+  padding: 32px 20px 36px;
+  border-top: 1px solid rgba(250, 224, 180, 0.12);
+  background:
+    linear-gradient(90deg, rgba(24, 59, 29, 0.98), rgba(13, 38, 19, 0.98)),
+    var(--sr-green-dark);
+  color: #fff8ed;
+}
+
+.site-footer-inner {
+  width: min(1180px, 100%);
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.site-footer-brand {
+  display: block;
+  margin-bottom: 8px;
+  font-family: "Cormorant Garamond", serif;
+  font-size: 1.8rem;
+  line-height: 1;
+}
+
+.site-footer-copy {
+  max-width: 520px;
+  margin: 0;
+  color: rgba(255, 248, 237, 0.8);
+  line-height: 1.6;
+}
+
+.site-footer-links {
+  display: flex;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+
+.site-footer-links a {
+  color: #f6c36c;
+  font-weight: 700;
+}
+
+.theme-toggle {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 80;
+  width: 64px;
+  height: 36px;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+}
+
+.theme-toggle-track {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  padding: 4px;
+  border-radius: inherit;
+  border: 1px solid var(--sr-border-strong);
+  background: color-mix(in srgb, var(--sr-surface-solid) 88%, transparent);
+  box-shadow: var(--sr-shadow);
+  backdrop-filter: blur(16px);
+}
+
+.theme-toggle-thumb {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  background: var(--sr-green);
+  color: #fffdf5;
+  transform: translateX(0);
+  transition: transform 0.24s ease, background 0.24s ease;
+}
+
+:root[data-theme="dark"] .theme-toggle-thumb {
+  transform: translateX(28px);
+  background: var(--sr-gold);
+  color: #171006;
+}
+
+.theme-toggle svg {
+  width: 16px;
+  height: 16px;
+}
+
+@media (max-width: 720px) {
+  .theme-toggle {
+    top: 14px;
+    right: 12px;
+    width: 56px;
+    height: 32px;
+  }
+
+  .theme-toggle-thumb {
+    width: 24px;
+    height: 24px;
+  }
+
+  :root[data-theme="dark"] .theme-toggle-thumb {
+    transform: translateX(24px);
+  }
+}
+
+body,
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button,
+input,
+select,
+textarea {
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+svg {
+  display: block;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+#root {
+  min-height: 100vh;
+  max-width: 100%;
+  overflow-x: clip;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--sr-gold) 30%, transparent);
+  color: var(--sr-heading);
+}
+
+.site-toast-stack {
+  position: fixed;
+  top: 24px;
+  right: 24px;
+  z-index: 99999;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  pointer-events: none;
+}
+
+.site-toast {
+  min-width: 280px;
+  max-width: 420px;
+  padding: 14px 18px;
+  border-radius: 12px;
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 1.4;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+  animation: toast-slide-in 0.25s ease-out;
+}
+
+.site-toast-success {
+  background: #16a34a;
+}
+
+.site-toast-error {
+  background: #dc2626;
+}
+
+.site-toast-warning {
+  background: #d97706;
+}
+
+@keyframes toast-slide-in {
+  from {
+    opacity: 0;
+    transform: translateX(24px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@media (max-width: 768px) {
+  .site-toast-stack {
+    left: 16px;
+    right: 16px;
+    top: 16px;
+  }
+
+  .site-toast {
+    min-width: auto;
+    max-width: none;
+  }
+}

@@ -1,0 +1,860 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function activeAdminDocPath(uid) {
+      return /databases/$(database)/documents/admins/$(uid);
+    }
+
+    function isActiveAdminRecord(uid) {
+      return exists(activeAdminDocPath(uid)) &&
+        get(activeAdminDocPath(uid)).data.status in ["active", "Active"];
+    }
+
+    function isActiveAdmin() {
+      return isSignedIn() && isActiveAdminRecord(request.auth.uid);
+    }
+
+    function isAdmin() {
+      return isActiveAdmin();
+    }
+
+    function hasValidUserFields(userId) {
+      return request.resource.data.keys().hasOnly([
+        "uid",
+        "firstName",
+        "name",
+        "email",
+        "phoneNumber",
+        "alternatePhoneNumber",
+        "addressLine1",
+        "addressLine2",
+        "city",
+        "state",
+        "pincode",
+        "deliveryInstructions",
+        "status",
+        "adminStatus",
+        "createdAt",
+        "updatedAt",
+        "lastLoginAt"
+      ]) &&
+        request.resource.data.uid == userId &&
+        request.resource.data.firstName is string &&
+        request.resource.data.name is string &&
+        (
+          request.resource.data.email == request.auth.token.email ||
+          (resource != null && request.resource.data.email == resource.data.email)
+        ) &&
+        request.resource.data.phoneNumber is string &&
+        request.resource.data.alternatePhoneNumber is string &&
+        request.resource.data.addressLine1 is string &&
+        request.resource.data.addressLine2 is string &&
+        request.resource.data.city is string &&
+        request.resource.data.state is string &&
+        request.resource.data.pincode is string &&
+        request.resource.data.deliveryInstructions is string &&
+        (
+          !("status" in request.resource.data) ||
+          request.resource.data.status is string
+        ) &&
+        (
+          !("adminStatus" in request.resource.data) ||
+          request.resource.data.adminStatus is string
+        ) &&
+        (
+          request.resource.data.lastLoginAt == null ||
+          request.resource.data.lastLoginAt is timestamp
+        );
+    }
+
+    function hasValidAdminCustomerUpdate(userId) {
+      return resource != null &&
+        request.resource.data.keys().hasOnly([
+          "uid",
+          "firstName",
+          "name",
+          "email",
+          "phoneNumber",
+          "alternatePhoneNumber",
+          "addressLine1",
+          "addressLine2",
+          "city",
+          "state",
+          "pincode",
+          "deliveryInstructions",
+          "status",
+          "adminStatus",
+          "createdAt",
+          "updatedAt",
+          "lastLoginAt"
+        ]) &&
+        request.resource.data.uid == userId &&
+        request.resource.data.createdAt == resource.data.createdAt &&
+        request.resource.data.firstName is string &&
+        request.resource.data.name is string &&
+        request.resource.data.email is string &&
+        request.resource.data.phoneNumber is string &&
+        request.resource.data.alternatePhoneNumber is string &&
+        request.resource.data.addressLine1 is string &&
+        request.resource.data.addressLine2 is string &&
+        request.resource.data.city is string &&
+        request.resource.data.state is string &&
+        request.resource.data.pincode is string &&
+        request.resource.data.deliveryInstructions is string &&
+        (
+          !("status" in request.resource.data) ||
+          request.resource.data.status is string
+        ) &&
+        (
+          !("adminStatus" in request.resource.data) ||
+          request.resource.data.adminStatus is string
+        ) &&
+        (
+          request.resource.data.lastLoginAt == null ||
+          request.resource.data.lastLoginAt is timestamp
+        );
+    }
+
+    function hasValidCartFields() {
+      return request.resource.data.keys().hasOnly(["items", "couponCode", "updatedAt"]) &&
+        request.resource.data.items is list &&
+        request.resource.data.couponCode is string;
+    }
+
+    function hasValidLoginEventFields(userId) {
+      return request.resource.data.keys().hasOnly([
+        "uid",
+        "email",
+        "name",
+        "isAdmin",
+        "source",
+        "createdAt"
+      ]) &&
+        request.resource.data.uid == userId &&
+        (
+          request.resource.data.email == request.auth.token.email ||
+          (resource != null && request.resource.data.email == resource.data.email)
+        ) &&
+        request.resource.data.name is string &&
+        request.resource.data.isAdmin is bool &&
+        request.resource.data.source is string;
+    }
+
+    function hasValidOrderCouponField() {
+      return !("coupon" in request.resource.data) ||
+        request.resource.data.coupon == null ||
+        request.resource.data.coupon is map;
+    }
+
+    function hasValidOrderFields(userId) {
+      return request.resource.data.keys().hasOnly([
+        "userId",
+        "customer",
+        "items",
+        "itemCount",
+        "subtotal",
+        "discountAmount",
+        "couponCode",
+        "coupon",
+        "deliveryCharge",
+        "total",
+        "paymentMethod",
+        "paymentStatus",
+        "paymentProvider",
+        "paymentMode",
+        "paymentId",
+        "razorpayOrderId",
+        "razorpaySignature",
+        "paidAt",
+        "status",
+        "statusTimeline",
+        "statusHistory",
+        "createdAt",
+        "updatedAt"
+      ]) &&
+        request.resource.data.userId == userId &&
+        request.resource.data.customer is map &&
+        request.resource.data.items is list &&
+        request.resource.data.itemCount is number &&
+        request.resource.data.subtotal is number &&
+        request.resource.data.discountAmount is number &&
+        request.resource.data.couponCode is string &&
+        hasValidOrderCouponField() &&
+        request.resource.data.deliveryCharge is number &&
+        request.resource.data.total is number &&
+        request.resource.data.paymentMethod is string &&
+        request.resource.data.paymentStatus is string &&
+        request.resource.data.paymentProvider is string &&
+        request.resource.data.paymentMode is string &&
+        request.resource.data.paymentId is string &&
+        request.resource.data.razorpayOrderId is string &&
+        request.resource.data.razorpaySignature is string &&
+        (
+          request.resource.data.paidAt == null ||
+          request.resource.data.paidAt is timestamp
+        ) &&
+        request.resource.data.status is string &&
+        request.resource.data.statusTimeline is map &&
+        request.resource.data.statusHistory is list;
+    }
+
+    function orderImmutableFieldsMatch() {
+      return request.resource.data.userId == resource.data.userId &&
+        request.resource.data.customer == resource.data.customer &&
+        request.resource.data.items == resource.data.items &&
+        request.resource.data.itemCount == resource.data.itemCount &&
+        request.resource.data.subtotal == resource.data.subtotal &&
+        request.resource.data.discountAmount == resource.data.discountAmount &&
+        request.resource.data.couponCode == resource.data.couponCode &&
+        request.resource.data.coupon == resource.data.coupon &&
+        request.resource.data.deliveryCharge == resource.data.deliveryCharge &&
+        request.resource.data.total == resource.data.total &&
+        request.resource.data.paymentMethod == resource.data.paymentMethod &&
+        request.resource.data.paymentProvider == resource.data.paymentProvider &&
+        request.resource.data.paymentMode == resource.data.paymentMode &&
+        request.resource.data.paymentId == resource.data.paymentId &&
+        request.resource.data.razorpayOrderId == resource.data.razorpayOrderId &&
+        request.resource.data.razorpaySignature == resource.data.razorpaySignature &&
+        request.resource.data.paidAt == resource.data.paidAt &&
+        request.resource.data.createdAt == resource.data.createdAt;
+    }
+
+    function hasValidOrderAdminUpdate() {
+      return request.resource.data.diff(resource.data).changedKeys().hasOnly([
+        "status",
+        "paymentStatus",
+        "updatedAt",
+        "statusTimeline",
+        "statusHistory"
+      ]) &&
+        orderImmutableFieldsMatch() &&
+        request.resource.data.status is string &&
+        request.resource.data.paymentStatus is string;
+    }
+
+    function hasValidOrderCustomerCancelUpdate() {
+      return request.resource.data.diff(resource.data).changedKeys().hasOnly([
+        "status",
+        "updatedAt",
+        "statusTimeline",
+        "statusHistory"
+      ]) &&
+        orderImmutableFieldsMatch() &&
+        request.resource.data.status in ["cancel", "cancelled", "canceled"];
+    }
+
+    function hasValidProductFields() {
+      return request.resource.data.keys().hasOnly([
+        "slug",
+        "productName",
+        "category",
+        "price",
+        "basePrice",
+        "stock",
+        "description",
+        "story",
+        "ingredients",
+        "status",
+        "imageUrl",
+        "unit",
+        "featured",
+        "rating",
+        "ratingCount",
+        "sku",
+        "reorderLevel",
+        "highlights",
+        "sizes",
+        "priceTiers",
+        "createdAt",
+        "updatedAt"
+      ]) &&
+        request.resource.data.slug is string &&
+        request.resource.data.productName is string &&
+        request.resource.data.category is string &&
+        request.resource.data.price is number &&
+        request.resource.data.basePrice is number &&
+        request.resource.data.stock is number &&
+        request.resource.data.description is string &&
+        request.resource.data.story is string &&
+        request.resource.data.ingredients is string &&
+        request.resource.data.status is string &&
+        request.resource.data.imageUrl is string &&
+        request.resource.data.unit is string &&
+        request.resource.data.featured is bool &&
+        request.resource.data.rating is number &&
+        request.resource.data.ratingCount is number &&
+        request.resource.data.sku is string &&
+        request.resource.data.reorderLevel is number &&
+        request.resource.data.highlights is list &&
+        request.resource.data.sizes is list &&
+        request.resource.data.priceTiers is list;
+    }
+
+    function hasValidProductHistoryFields() {
+      return request.resource.data.keys().hasOnly([
+        "action",
+        "productId",
+        "productName",
+        "category",
+        "totalCount",
+        "price",
+        "status",
+        "imageUrl",
+        "sku",
+        "priceTiers",
+        "createdAt"
+      ]) &&
+        request.resource.data.action is string &&
+        request.resource.data.productId is string &&
+        request.resource.data.productName is string &&
+        request.resource.data.category is string &&
+        request.resource.data.totalCount is number &&
+        request.resource.data.price is number &&
+        request.resource.data.status is string &&
+        request.resource.data.imageUrl is string &&
+        request.resource.data.sku is string &&
+        request.resource.data.priceTiers is list;
+    }
+
+    function hasValidCouponFields() {
+      return request.resource.data.keys().hasOnly([
+        "code",
+        "title",
+        "description",
+        "discountValue",
+        "type",
+        "minOrderValue",
+        "usageCount",
+        "usageLimit",
+        "expiresAt",
+        "status",
+        "createdAt",
+        "updatedAt"
+      ]) &&
+        request.resource.data.code is string &&
+        request.resource.data.title is string &&
+        request.resource.data.description is string &&
+        request.resource.data.discountValue is number &&
+        request.resource.data.type is string &&
+        request.resource.data.minOrderValue is number &&
+        request.resource.data.usageCount is number &&
+        request.resource.data.usageLimit is number &&
+        request.resource.data.expiresAt is string &&
+        request.resource.data.status is string;
+    }
+
+    function hasValidBannerFields() {
+      return request.resource.data.keys().hasOnly([
+        "title",
+        "subtitle",
+        "eyebrow",
+        "buttonText",
+        "buttonLink",
+        "couponCode",
+        "location",
+        "imageUrl",
+        "status",
+        "sortOrder",
+        "createdAt",
+        "updatedAt"
+      ]) &&
+        request.resource.data.title is string &&
+        request.resource.data.subtitle is string &&
+        request.resource.data.eyebrow is string &&
+        request.resource.data.buttonText is string &&
+        request.resource.data.buttonLink is string &&
+        request.resource.data.couponCode is string &&
+        request.resource.data.location is string &&
+        request.resource.data.imageUrl is string &&
+        request.resource.data.status is string &&
+        request.resource.data.sortOrder is number;
+    }
+
+    function hasValidAdminFields(userId) {
+      return request.resource.data.keys().hasOnly([
+        "uid",
+        "email",
+        "name",
+        "role",
+        "status",
+        "createdAt",
+        "updatedAt",
+        "lastLoginAt"
+      ]) &&
+        request.resource.data.uid == userId &&
+        request.resource.data.email is string &&
+        request.resource.data.name is string &&
+        request.resource.data.role is string &&
+        request.resource.data.status is string &&
+        (
+          !("lastLoginAt" in request.resource.data) ||
+          request.resource.data.lastLoginAt == null ||
+          request.resource.data.lastLoginAt is timestamp
+        );
+    }
+
+    function hasValidAdminOwnerSessionUpdate(userId) {
+      return isOwner(userId) &&
+        resource != null &&
+        resource.data.status in ["active", "Active"] &&
+        request.resource.data.uid == userId &&
+        request.resource.data.status == resource.data.status &&
+        request.resource.data.role == resource.data.role &&
+        request.resource.data.createdAt == resource.data.createdAt &&
+        hasValidAdminFields(userId);
+    }
+
+    function hasValidBestSellerFields() {
+      return request.resource.data.keys().hasOnly([
+        "sourceProductId",
+        "productName",
+        "category",
+        "price",
+        "stock",
+        "imageUrl",
+        "description",
+        "highlights",
+        "status",
+        "sortOrder",
+        "createdAt",
+        "updatedAt"
+      ]) &&
+        request.resource.data.sourceProductId is string &&
+        request.resource.data.productName is string &&
+        request.resource.data.category is string &&
+        request.resource.data.price is number &&
+        request.resource.data.stock is number &&
+        request.resource.data.imageUrl is string &&
+        request.resource.data.description is string &&
+        request.resource.data.highlights is list &&
+        request.resource.data.status is string &&
+        request.resource.data.sortOrder is number;
+    }
+
+    function hasValidCategoryFields() {
+      return request.resource.data.keys().hasOnly([
+        "name",
+        "image",
+        "description"
+      ]) &&
+        request.resource.data.name is string &&
+        request.resource.data.image is string &&
+        request.resource.data.description is string;
+    }
+
+    function hasValidReviewFields(userId) {
+      return request.resource.data.keys().hasOnly([
+        "userId",
+        "customerName",
+        "customerEmail",
+        "orderId",
+        "productId",
+        "productName",
+        "type",
+        "rating",
+        "review",
+        "status",
+        "createdAt",
+        "updatedAt"
+      ]) &&
+        request.resource.data.userId == userId &&
+        request.resource.data.customerName is string &&
+        request.resource.data.customerEmail == request.auth.token.email &&
+        request.resource.data.orderId is string &&
+        request.resource.data.productId is string &&
+        request.resource.data.productName is string &&
+        request.resource.data.type is string &&
+        request.resource.data.rating is number &&
+        request.resource.data.review is string &&
+        request.resource.data.status is string;
+    }
+
+    function hasValidReviewAdminUpdate() {
+      return request.resource.data.diff(resource.data).changedKeys().hasOnly([
+        "status",
+        "updatedAt"
+      ]) &&
+        request.resource.data.userId == resource.data.userId &&
+        request.resource.data.customerName == resource.data.customerName &&
+        request.resource.data.customerEmail == resource.data.customerEmail &&
+        request.resource.data.orderId == resource.data.orderId &&
+        request.resource.data.productId == resource.data.productId &&
+        request.resource.data.productName == resource.data.productName &&
+        request.resource.data.type == resource.data.type &&
+        request.resource.data.rating == resource.data.rating &&
+        request.resource.data.review == resource.data.review &&
+        request.resource.data.createdAt == resource.data.createdAt &&
+        request.resource.data.status is string;
+    }
+
+    function hasValidAdminNotificationFields(userId) {
+      return request.resource.data.keys().hasOnly([
+        "type",
+        "userId",
+        "orderId",
+        "orderDocumentId",
+        "customerName",
+        "customerEmail",
+        "status",
+        "orderStatus",
+        "createdAt",
+        "readAt"
+      ]) &&
+        request.resource.data.type is string &&
+        request.resource.data.userId == userId &&
+        request.resource.data.orderId is string &&
+        request.resource.data.orderDocumentId is string &&
+        request.resource.data.customerName is string &&
+        request.resource.data.customerEmail == request.auth.token.email &&
+        request.resource.data.status is string &&
+        request.resource.data.orderStatus is string;
+    }
+
+    function hasValidAdminNotificationUpdate() {
+      return request.resource.data.diff(resource.data).changedKeys().hasOnly([
+        "status",
+        "readAt",
+        "orderStatus"
+      ]) &&
+        request.resource.data.type == resource.data.type &&
+        request.resource.data.userId == resource.data.userId &&
+        request.resource.data.orderId == resource.data.orderId &&
+        request.resource.data.orderDocumentId == resource.data.orderDocumentId &&
+        request.resource.data.customerName == resource.data.customerName &&
+        request.resource.data.customerEmail == resource.data.customerEmail &&
+        request.resource.data.createdAt == resource.data.createdAt &&
+        request.resource.data.status is string &&
+        request.resource.data.orderStatus is string;
+    }
+
+    function hasValidContactSubmissionFields() {
+      return request.resource.data.keys().hasOnly([
+        "userId",
+        "name",
+        "email",
+        "message",
+        "status",
+        "adminSeen",
+        "adminReply",
+        "adminReplyAt",
+        "userReplySeen",
+        "createdAt",
+        "updatedAt"
+      ]) &&
+        (
+          request.resource.data.userId == null ||
+          request.resource.data.userId is string
+        ) &&
+        request.resource.data.name is string &&
+        request.resource.data.email is string &&
+        request.resource.data.message is string &&
+        request.resource.data.status is string &&
+        request.resource.data.adminSeen is bool &&
+        request.resource.data.adminReply is string &&
+        (
+          request.resource.data.adminReplyAt == null ||
+          request.resource.data.adminReplyAt is timestamp
+        ) &&
+        request.resource.data.userReplySeen is bool;
+    }
+
+    function hasValidContactSubmissionAdminUpdate() {
+      return request.resource.data.diff(resource.data).changedKeys().hasOnly([
+        "status",
+        "adminSeen",
+        "adminReply",
+        "adminReplyAt",
+        "userReplySeen",
+        "updatedAt"
+      ]) &&
+        request.resource.data.userId == resource.data.userId &&
+        request.resource.data.name == resource.data.name &&
+        request.resource.data.email == resource.data.email &&
+        request.resource.data.message == resource.data.message &&
+        request.resource.data.createdAt == resource.data.createdAt &&
+        request.resource.data.status is string &&
+        request.resource.data.adminSeen is bool &&
+        request.resource.data.adminReply is string &&
+        (
+          request.resource.data.adminReplyAt == null ||
+          request.resource.data.adminReplyAt is timestamp
+        ) &&
+        request.resource.data.userReplySeen is bool;
+    }
+
+    function hasValidAdminLogFields() {
+      return request.resource.data.keys().hasOnly([
+        "section",
+        "action",
+        "target",
+        "adminName",
+        "details",
+        "createdAt"
+      ]) &&
+        request.resource.data.section is string &&
+        request.resource.data.action is string &&
+        request.resource.data.target is string &&
+        request.resource.data.adminName is string &&
+        request.resource.data.details is string;
+    }
+
+    function hasValidContactReplySeenUpdate() {
+      return request.resource.data.diff(resource.data).changedKeys().hasOnly([
+        "userReplySeen",
+        "updatedAt"
+      ]) &&
+        request.resource.data.userId == resource.data.userId &&
+        request.resource.data.name == resource.data.name &&
+        request.resource.data.email == resource.data.email &&
+        request.resource.data.message == resource.data.message &&
+        request.resource.data.status == resource.data.status &&
+        request.resource.data.adminSeen == resource.data.adminSeen &&
+        request.resource.data.adminReply == resource.data.adminReply &&
+        request.resource.data.adminReplyAt == resource.data.adminReplyAt &&
+        request.resource.data.createdAt == resource.data.createdAt &&
+        request.resource.data.userReplySeen is bool;
+    }
+
+    match /admins/{userId} {
+      // Own profile read must not depend on isAdmin() (bootstrap before admins/{uid} exists).
+      allow get: if isOwner(userId);
+      allow list: if isActiveAdmin();
+
+      allow create: if (isActiveAdmin() && hasValidAdminFields(userId)) ||
+        (isOwner(userId) && hasValidAdminFields(userId));
+
+      allow update: if (isActiveAdmin() && hasValidAdminFields(userId)) ||
+        hasValidAdminOwnerSessionUpdate(userId);
+
+      allow delete: if isActiveAdmin();
+    }
+
+    match /users/{userId} {
+      allow create: if isOwner(userId) &&
+        hasValidUserFields(userId);
+
+      allow read: if isOwner(userId) || isAdmin();
+
+      allow update: if (
+        isOwner(userId) &&
+          hasValidUserFields(userId) &&
+          request.resource.data.uid == resource.data.uid &&
+          request.resource.data.createdAt == resource.data.createdAt
+      ) ||
+        (
+          isAdmin() &&
+          hasValidAdminCustomerUpdate(userId)
+        )
+      ;
+
+      allow delete: if isAdmin();
+
+      match /cart/{cartId} {
+        allow read: if (isOwner(userId) || isAdmin()) && cartId == "current";
+
+        allow write: if isOwner(userId) &&
+          cartId == "current" &&
+          hasValidCartFields();
+      }
+
+      match /loginEvents/{eventId} {
+        allow create: if isOwner(userId) &&
+          hasValidLoginEventFields(userId);
+
+        allow read: if isOwner(userId) || isAdmin();
+
+        allow update, delete: if false;
+      }
+
+      match /orders/{orderId} {
+        allow create: if isOwner(userId) &&
+          hasValidOrderFields(userId);
+
+        allow read: if isOwner(userId) || isAdmin();
+
+        allow update: if (isAdmin() && hasValidOrderAdminUpdate()) ||
+          (isOwner(userId) && hasValidOrderCustomerCancelUpdate());
+
+        allow delete: if false;
+      }
+
+      match /queryReplies/{replyId} {
+        allow read: if isOwner(userId) || isAdmin();
+
+        allow create, update: if isAdmin() ||
+          (
+            isOwner(userId) &&
+            request.resource.data.diff(resource.data).changedKeys().hasOnly(["seen"]) &&
+            request.resource.data.seen is bool
+          );
+
+        allow delete: if false;
+      }
+    }
+
+    match /{path=**}/orders/{orderId} {
+      allow read: if isAdmin();
+    }
+
+    match /products/{productId} {
+      allow read: if true;
+
+      allow create, update: if isAdmin() &&
+        hasValidProductFields();
+
+      allow delete: if isAdmin();
+    }
+
+    match /productHistory/{historyId} {
+      allow read: if isAdmin();
+
+      allow create: if isAdmin() &&
+        hasValidProductHistoryFields();
+
+      allow update, delete: if false;
+    }
+
+    match /coupons/{couponId} {
+      allow read: if true;
+
+      allow create, update: if isAdmin() &&
+        hasValidCouponFields();
+
+      allow delete: if isAdmin();
+    }
+
+    match /banners/{bannerId} {
+      allow read: if true;
+
+      allow create, update: if isAdmin() &&
+        hasValidBannerFields();
+
+      allow delete: if isAdmin();
+    }
+
+    match /bestSellers/{bestSellerId} {
+      allow read: if true;
+
+      allow create, update: if isAdmin() &&
+        hasValidBestSellerFields();
+
+      allow delete: if isAdmin();
+    }
+
+    match /categories/{categoryId} {
+      allow read: if true;
+
+      allow create, update: if isAdmin() &&
+        hasValidCategoryFields();
+
+      allow delete: if isAdmin();
+    }
+
+    match /adminLogs/{logId} {
+      allow read: if isAdmin();
+
+      allow create: if isAdmin() &&
+        hasValidAdminLogFields();
+
+      allow update, delete: if false;
+    }
+
+    match /reviews/{reviewId} {
+      allow create: if isSignedIn() &&
+        hasValidReviewFields(request.auth.uid);
+
+      allow read: if isAdmin() ||
+        resource.data.status == "Approved" ||
+        (isSignedIn() && resource.data.userId == request.auth.uid);
+
+      allow update: if isAdmin() &&
+        hasValidReviewAdminUpdate();
+
+      allow delete: if isAdmin();
+    }
+
+    match /adminNotifications/{notificationId} {
+      allow create: if isSignedIn() &&
+        hasValidAdminNotificationFields(request.auth.uid);
+
+      allow read: if isAdmin();
+
+      allow update: if isAdmin() &&
+        hasValidAdminNotificationUpdate();
+
+      allow delete: if false;
+    }
+
+    match /contactSubmissions/{submissionId} {
+      allow create: if hasValidContactSubmissionFields();
+
+      allow read: if isAdmin() ||
+        (
+          isSignedIn() &&
+          (
+            resource.data.userId == request.auth.uid ||
+            resource.data.email == request.auth.token.email
+          )
+        );
+
+      allow update: if (isAdmin() && hasValidContactSubmissionAdminUpdate()) ||
+        (
+          isSignedIn() &&
+          (
+            resource.data.userId == request.auth.uid ||
+            resource.data.email == request.auth.token.email
+          ) &&
+          hasValidContactReplySeenUpdate()
+        );
+
+      allow delete: if isAdmin();
+    }
+
+    function hasValidStoreSettingsFields() {
+      return request.resource.data.keys().hasOnly([
+        "storeName",
+        "storeEmail",
+        "storePhone",
+        "paymentGateway",
+        "autoRefunds",
+        "codLimit",
+        "freeShippingThreshold",
+        "defaultSla",
+        "returnWindow",
+        "updatedAt"
+      ]) &&
+        request.resource.data.storeName is string &&
+        request.resource.data.storeEmail is string &&
+        request.resource.data.storePhone is string &&
+        request.resource.data.paymentGateway is string &&
+        request.resource.data.autoRefunds is string &&
+        request.resource.data.codLimit is string &&
+        request.resource.data.freeShippingThreshold is string &&
+        request.resource.data.defaultSla is string &&
+        request.resource.data.returnWindow is string;
+    }
+
+    match /storeSettings/{settingId} {
+      allow read: if true;
+
+      allow create, update: if isAdmin() &&
+        settingId == "general" &&
+        hasValidStoreSettingsFields();
+
+      allow delete: if false;
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
