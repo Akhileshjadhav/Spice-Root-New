@@ -4,8 +4,8 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "node node_modules/vite/bin/vite.js --host 0.0.0.0 --configLoader native",
-    "build": "node node_modules/vite/bin/vite.js build --configLoader native",
+    "dev": "vite --host 0.0.0.0",
+    "build": "vite build",
     "lint": "node node_modules/eslint/bin/eslint.js src vite.config.js eslint.config.js",
     "preview": "node node_modules/vite/bin/vite.js preview"
   },
